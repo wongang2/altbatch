@@ -1,5 +1,7 @@
 # AltBatch
 
+Why: when an informative image has no alt text, a screen reader user learns nothing useful about it. Small site owners skip the field because writing descriptions one by one takes time and per-image tools cost money. AltBatch drafts them in a batch, keeps ordinary photos on the owner's computer when Chrome's on-device model is available, and leaves the final wording to the owner.
+
 AltBatch drafts alt text for a batch of images from a small website. When Chrome's built-in Gemini Nano is available, ordinary photos are described on your own computer. Images the on-device model cannot handle, charts that need a long description, and images you send yourself go to a cloud model, and each card says why. You review and approve every description before exporting.
 
 Built for the #BuildHybridAI hackathon with Firebase AI Logic hybrid inference (`firebase/ai`, `InferenceMode.PREFER_ON_DEVICE` plus `ONLY_IN_CLOUD`).
