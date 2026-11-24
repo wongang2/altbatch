@@ -54,7 +54,7 @@ Deploy (you run this yourself): `firebase deploy --only hosting,firestore:rules`
 
 ## What we tested
 
-- On-device drafting was verified on Windows 11 with an RTX 4080, in Chrome started inside a signed-in desktop session with `--enable-features=OptimizationGuideOnDeviceModel:BypassPerfRequirement/true,PromptAPIForGeminiNano,PromptAPIForGeminiNanoMultimodalInput`.
+- On-device drafting was verified with Chrome 157 on Windows 11 (RTX 4080), in Chrome started inside a signed-in desktop session, both with `--enable-features=OptimizationGuideOnDeviceModel:BypassPerfRequirement/true,PromptAPIForGeminiNano,PromptAPIForGeminiNanoMultimodalInput` and without these flags (on a profile where the model had already downloaded).
 - The same Chrome started over SSH without a desktop session downloaded the model but could not create a session ("The device is unable to create a session to run the model"); `chrome://on-device-internals` showed the model service crashing. If you see that message, start Chrome from the desktop.
 - The cloud path was verified on https://altbatch.web.app with no on-device model.
 
