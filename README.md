@@ -1,6 +1,6 @@
 # AltBatch
 
-AltBatch drafts alt text for every image on a small website. Ordinary photos are described by Chrome's built-in Gemini Nano on your own computer. Only what the on-device model cannot handle goes to a cloud model. You review and approve every description before exporting.
+AltBatch drafts alt text for a batch of images from a small website. When Chrome's built-in Gemini Nano is available, ordinary photos are described on your own computer. Images the on-device model cannot handle, charts that need a long description, and images you send yourself go to a cloud model, and each card says why. You review and approve every description before exporting.
 
 Built for the #BuildHybridAI hackathon with Firebase AI Logic hybrid inference (`firebase/ai`, `InferenceMode.PREFER_ON_DEVICE` plus `ONLY_IN_CLOUD`).
 
@@ -51,6 +51,12 @@ Deploy (you run this yourself): `firebase deploy --only hosting,firestore:rules`
 - For image input on localhost, enable `chrome://flags/#prompt-api-for-gemini-nano-multimodal-input` and restart Chrome.
 - Click "Start on-device model". The download can take several minutes. Check `chrome://on-device-internals` for status.
 - On-device output is English only (Chrome's model lists English, Japanese, Spanish, German and French).
+
+## What we tested
+
+- On-device drafting was verified on Windows 11 with an RTX 4080, in Chrome started inside a signed-in desktop session with `--enable-features=OptimizationGuideOnDeviceModel:BypassPerfRequirement/true,PromptAPIForGeminiNano,PromptAPIForGeminiNanoMultimodalInput`.
+- The same Chrome started over SSH without a desktop session downloaded the model but could not create a session ("The device is unable to create a session to run the model"); `chrome://on-device-internals` showed the model service crashing. If you see that message, start Chrome from the desktop.
+- The cloud path was verified on https://altbatch.web.app with no on-device model.
 
 ## No on-device model? Cloud only
 
