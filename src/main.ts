@@ -49,6 +49,7 @@ function renderCard(c: ImageCard): HTMLElement {
   if (c.status === 'skipped') status.append(el('span', { class: 'reason' }, 'Skipped: cloud use was not allowed.'));
   root.append(status);
   if (c.reason) root.append(el('div', { class: 'reason' }, `Reason: ${c.reason}`));
+  if (c.deviceNote && c.source === 'cloud') root.append(el('div', { class: 'reason note' }, c.deviceNote));
   if (c.error) root.append(el('div', { class: 'err', role: 'alert' }, c.error));
 
   const altId = `alt-${c.id}`;

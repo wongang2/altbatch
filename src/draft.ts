@@ -42,6 +42,7 @@ async function viaCloud(card: ImageCard, ctx: DraftContext, route: Route): Promi
 export async function draftCard(card: ImageCard, ctx: DraftContext): Promise<void> {
   if (!card.blob) return;
   card.status = 'working';
+  card.deviceNote = undefined;
   try {
     let route: Route = card.forceCloud
       ? { source: 'cloud', reason: REASONS.manual }
@@ -54,6 +55,7 @@ export async function draftCard(card: ImageCard, ctx: DraftContext): Promise<voi
         const out = await describe(ctx.handles!.hybrid, card.blob, card.mime, false);
         if (out.source === 'cloud') {
           // The prefer-on-device handle fell back to the cloud by itself.
+          card.deviceNote = 'The SDK reported the on-device model as not ready for this request.';
           apply(card, out.result, deviceFailureRoute(), 'cloud');
           return;
         }
@@ -62,7 +64,8 @@ export async function draftCard(card: ImageCard, ctx: DraftContext): Promise<voi
           apply(card, out.result, route, 'device');
           return;
         }
-      } catch {
+      } catch (e) {
+        card.deviceNote = `On-device call failed: ${(e as Error).message}`;
         route = deviceFailureRoute();
       }
     }

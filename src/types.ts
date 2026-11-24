@@ -30,6 +30,8 @@ export interface ImageCard {
   reason?: string;
   status: CardStatus;
   error?: string;
+  /** why the on-device call did not answer (shown under the reason) */
+  deviceNote?: string;
   /** user asked for this card to go to the cloud */
   forceCloud?: boolean;
 }
