@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AltBatch: alt text drafts, mostly on your computer</title>
+  <meta name="description" content="Draft alt text for every image on a small website with Firebase AI Logic hybrid inference.">
+  <link rel="stylesheet" href="/src/style.css">
+</head>
+<body>
+  <a class="skip" href="#cards">Skip to cards</a>
+  <header>
+    <h1>AltBatch</h1>
+    <p class="lead">Draft alt text for every image on a small site. Ordinary photos are described by Chrome's on-device model and never leave this computer.</p>
+  </header>
+  <main>
+    <section aria-labelledby="in-h" class="panel">
+      <h2 id="in-h">1. Add images</h2>
+      <label for="html">Paste HTML (optional)</label>
+      <textarea id="html" rows="5" placeholder="&lt;img src=&quot;images/team.jpg&quot;&gt; ..."></textarea>
+      <div class="row">
+        <label class="btn" for="files">Choose images
+          <input id="files" type="file" accept="image/*" multiple class="vh">
+        </label>
+        <label class="btn" for="folder">Choose folder
+          <input id="folder" type="file" webkitdirectory multiple class="vh">
+        </label>
+        <button id="load" type="button">Load images</button>
+      </div>
+      <p id="picked" class="hint" role="status">No files chosen.</p>
+    </section>
+
+    <section aria-labelledby="dev-h" class="panel">
+      <h2 id="dev-h">2. Start the on-device model</h2>
+      <div class="row">
+        <button id="init" type="button">Start on-device model</button>
+        <progress id="prog" max="100" value="0" hidden aria-label="Model download progress"></progress>
+        <span id="devstatus" role="status">Checking on-device model…</span>
+      </div>
+      <p id="fbstatus" class="hint" role="status"></p>
+    </section>
+
+    <section aria-labelledby="run-h" class="panel">
+      <h2 id="run-h">3. Draft, edit, approve</h2>
+      <div class="row">
+        <button id="draft" type="button" class="primary">Draft alt text</button>
+        <button id="approve-all" type="button">Approve all drafted</button>
+      </div>
+      <p id="counter" class="counter" role="status" aria-live="polite">0 images never left this computer</p>
+      <div id="cards" class="cards" tabindex="-1"></div>
+    </section>
+
+    <section aria-labelledby="out-h" class="panel">
+      <h2 id="out-h">4. Export and save</h2>
+      <div class="row">
+        <button id="exp-html" type="button">Export HTML</button>
+        <button id="exp-csv" type="button">Export CSV</button>
+        <button id="save" type="button">Save session</button>
+        <label for="sessions" class="vh">Saved sessions</label>
+        <select id="sessions"><option value="">Saved sessions</option></select>
+        <button id="open" type="button">Load session</button>
+      </div>
+      <p id="msg" class="hint" role="status"></p>
+    </section>
+  </main>
+
+  <dialog id="consent" aria-labelledby="consent-h">
+    <form method="dialog">
+      <h2 id="consent-h">Send some images to the cloud?</h2>
+      <p>Some images cannot be handled on this device. To describe them, AltBatch sends the image to Gemini through Firebase AI Logic.</p>
+      <p>On the free tier, Google may use inputs to improve its products. Images that stay on the device are not sent anywhere.</p>
+      <div class="row">
+        <button value="yes" class="primary">I agree, send them</button>
+        <button value="no">No, skip cloud images</button>
+      </div>
+    </form>
+  </dialog>
+  <footer>
+    <p>Drafts are suggestions. You review every description before exporting. Saved sessions keep text only; images are never uploaded for storage.</p>
+  </footer>
+  <script type="module" src="/src/main.ts"></script>
+</body>
+</html>
