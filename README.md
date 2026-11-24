@@ -4,6 +4,8 @@ AltBatch drafts alt text for every image on a small website. Ordinary photos are
 
 Built for the #BuildHybridAI hackathon with Firebase AI Logic hybrid inference (`firebase/ai`, `InferenceMode.PREFER_ON_DEVICE` plus `ONLY_IN_CLOUD`).
 
+Live demo: https://altbatch.web.app (desktop Chrome; without the on-device model every image uses the cloud path).
+
 ## What it does
 
 1. Paste HTML, or choose a folder or several images.
@@ -38,7 +40,7 @@ npm test                     # routing unit tests (no Firebase needed)
 npm run build
 ```
 
-Local App Check: `npm run dev` sets `self.FIREBASE_APPCHECK_DEBUG_TOKEN = true`. Open the browser console, copy the printed debug token, and register it in Firebase console > App Check > Manage debug tokens. Never commit the token. For a deployed site set `VITE_RECAPTCHA_SITE_KEY` (reCAPTCHA v3 key registered in App Check).
+Local App Check: `npm run dev` sets `self.FIREBASE_APPCHECK_DEBUG_TOKEN = true`. Open the browser console, copy the printed debug token, and register it in Firebase console > App Check > Manage debug tokens. Never commit the token. For a deployed site set `VITE_RECAPTCHA_SITE_KEY` (a reCAPTCHA Enterprise key, now part of Google Cloud Fraud Defense, registered in App Check).
 
 Deploy (you run this yourself): `firebase deploy --only hosting,firestore:rules` after editing `.firebaserc`.
 

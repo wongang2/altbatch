@@ -1,5 +1,5 @@
 import { initializeApp, type FirebaseApp } from 'firebase/app';
-import { initializeAppCheck, ReCaptchaV3Provider } from 'firebase/app-check';
+import { initializeAppCheck, ReCaptchaEnterpriseProvider } from 'firebase/app-check';
 import { getAuth, signInAnonymously, type User } from 'firebase/auth';
 import { getFirestore, type Firestore } from 'firebase/firestore';
 import { getRemoteConfig, fetchAndActivate, getNumber } from 'firebase/remote-config';
@@ -31,7 +31,7 @@ export function startFirebase(): Promise<Backend | null> {
     if (import.meta.env.DEV || recaptchaSiteKey) {
       try {
         initializeAppCheck(app, {
-          provider: new ReCaptchaV3Provider(recaptchaSiteKey ?? 'debug-placeholder'),
+          provider: new ReCaptchaEnterpriseProvider(recaptchaSiteKey ?? 'debug-placeholder'),
           isTokenAutoRefreshEnabled: true,
         });
       } catch (e) {
