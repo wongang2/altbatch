@@ -7,6 +7,8 @@ export interface DraftContext {
   tokenMargin: number;
   /** Chrome Prompt API reports the model as available */
   deviceReady: boolean;
+  /** raw Chrome Prompt API availability, null when LanguageModel is missing */
+  availability?: string | null;
   /** asks the owner once before the first cloud call */
   confirmCloud: () => Promise<boolean>;
 }
@@ -48,15 +50,15 @@ export async function draftCard(card: ImageCard, ctx: DraftContext): Promise<voi
       ? { source: 'cloud', reason: REASONS.manual }
       : staticRoute(card.mime, card.width ?? 0, card.height ?? 0, ctx.tokenMargin);
 
-    if (route.source === 'device' && (!ctx.deviceReady || !ctx.handles)) route = deviceFailureRoute();
+    if (route.source === 'device' && (!ctx.deviceReady || !ctx.handles)) route = deviceFailureRoute(ctx.availability);
 
     if (route.source === 'device') {
       try {
         const out = await describe(ctx.handles!.hybrid, card.blob, card.mime, false);
         if (out.source === 'cloud') {
           // The prefer-on-device handle fell back to the cloud by itself.
-          card.deviceNote = 'The SDK reported the on-device model as not ready for this request.';
-          apply(card, out.result, deviceFailureRoute(), 'cloud');
+          card.deviceNote = `The SDK fell back to the cloud on its own (Chrome availability: ${ctx.availability ?? 'n/a'}).`;
+          apply(card, out.result, deviceFailureRoute(ctx.availability), 'cloud');
           return;
         }
         route = afterDeviceRoute(out.result.kind);
@@ -66,7 +68,7 @@ export async function draftCard(card: ImageCard, ctx: DraftContext): Promise<voi
         }
       } catch (e) {
         card.deviceNote = `On-device call failed: ${(e as Error).message}`;
-        route = deviceFailureRoute();
+        route = deviceFailureRoute(ctx.availability);
       }
     }
     await viaCloud(card, ctx, route);

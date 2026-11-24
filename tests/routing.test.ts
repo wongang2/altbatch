@@ -43,6 +43,8 @@ describe('reasons', () => {
   });
   it('device failure reason', () => {
     expect(deviceFailureRoute().reason).toBe('On-device model unavailable');
+    expect(deviceFailureRoute('downloadable').reason).toBe('On-device model unavailable (availability: downloadable)');
+    expect(deviceFailureRoute(null).reason).toBe('On-device model unavailable (LanguageModel API missing)');
   });
 });
 

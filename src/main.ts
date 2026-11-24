@@ -15,6 +15,7 @@ let picked: File[] = [];
 let backend: Backend | null = null;
 let handles: Handles | null = null;
 let deviceReady = false;
+let deviceAvail: string | null = null;
 let cloudConsent: boolean | null = null;
 
 const msg = (t: string) => { $('msg').textContent = t; };
@@ -99,6 +100,7 @@ async function confirmCloud(): Promise<boolean> {
 async function refreshDevice() {
   const a = await deviceAvailability();
   deviceReady = a === 'available';
+  deviceAvail = a;
   $('devstatus').textContent = a === null || a === 'unavailable'
     ? 'On-device model unavailable'
     : a === 'available' ? 'On-device model ready' : `On-device model: ${a}`;
@@ -106,7 +108,7 @@ async function refreshDevice() {
 
 async function run(list: ImageCard[]) {
   await refreshDevice();
-  const ctx: DraftContext = { handles, tokenMargin: backend?.tokenMargin ?? DEFAULT_TOKEN_MARGIN, deviceReady, confirmCloud };
+  const ctx: DraftContext = { handles, tokenMargin: backend?.tokenMargin ?? DEFAULT_TOKEN_MARGIN, deviceReady, availability: deviceAvail, confirmCloud };
   for (const c of list) {
     c.status = 'working'; rerender(c);
     await draftCard(c, ctx);

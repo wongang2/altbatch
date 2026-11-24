@@ -12,7 +12,7 @@ export const REASONS = {
   manual: 'Sent to cloud by you',
 } as const;
 
-export type Reason = (typeof REASONS)[keyof typeof REASONS];
+export type Reason = string;
 
 export interface Route {
   source: Source;
@@ -59,7 +59,14 @@ export function afterDeviceRoute(kind: Kind): Route {
   return kind === 'chart' ? { source: 'cloud', reason: REASONS.chart } : { source: 'device' };
 }
 
-/** Device model missing or the device call failed. */
-export function deviceFailureRoute(): Route {
-  return { source: 'cloud', reason: REASONS.unavailable };
+/**
+ * Device model missing or the device call failed.
+ * `availability` is the Chrome Prompt API value ('downloadable', 'available', ...), null when
+ * `LanguageModel` does not exist, undefined when it was not read.
+ */
+export function deviceFailureRoute(availability?: string | null): Route {
+  const detail = availability === undefined ? ''
+    : availability === null ? ' (LanguageModel API missing)'
+    : ` (availability: ${availability})`;
+  return { source: 'cloud', reason: `${REASONS.unavailable}${detail}` };
 }
